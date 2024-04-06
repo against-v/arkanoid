@@ -1,12 +1,15 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import TheArkanoid from "@/components/TheArkanoid/TheArkanoid.vue"
+</script>
 
 <template>
-  <div :class="$style.container">GameScreen</div>
+  <div :class="$style.container">
+    <TheArkanoid />
+  </div>
 </template>
 
 <style module>
 .container {
-  color: white;
   background-color: grey;
   height: 100%;
 }
