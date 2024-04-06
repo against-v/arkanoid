@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { useArkanoidLauncher } from "@/components/TheArkanoid/composables/useArkanoidLauncher";
 import { onMounted, ref } from "vue";
-
-const { init } = useArkanoidLauncher();
+import { Arkanoid } from "@/components/TheArkanoid/Arkanoid";
 
 const containerRef = ref<HTMLElement>();
 
+const arkanoid = new Arkanoid();
+
 onMounted(() => {
   if (containerRef.value) {
-    void init(containerRef.value);
+    void arkanoid.init(containerRef.value);
   }
 });
 </script>
