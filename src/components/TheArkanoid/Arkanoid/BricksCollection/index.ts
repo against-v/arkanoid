@@ -1,0 +1,1 @@
+export { BricksCollection } from "./BricksCollection";
