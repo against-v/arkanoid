@@ -7,16 +7,21 @@ import { BricksCollection } from "@/components/TheArkanoid/Arkanoid/BricksCollec
 
 export class Arkanoid {
   elements: Container[];
-  app: Application;
+  app: Application | null;
   points: number;
+  onFinishGame: () => void;
 
-  constructor() {
-    this.app = new Application();
+  constructor(onFinishGame: (points: number) => void) {
+    this.app = null;
     this.elements = [];
     this.points = 0;
+    this.onFinishGame = () => onFinishGame(this.points);
   }
 
   private draw() {
+    if (!this.app) {
+      return;
+    }
     const platform = new Platform(this.app);
     this.app.stage.addChild(platform);
     const userPlatformInteraction = new UserPlatformInteraction(this.app, platform);
@@ -25,22 +30,32 @@ export class Arkanoid {
     this.app.stage.addChild(...bricksCollection.getBricksCollection());
     const ball = new Ball(this.app, platform.getWidth(), platform.getTopCenterPoint());
     this.app.stage.addChild(ball);
-    const ballInteraction = new BallInteraction(this.app, ball, platform, bricksCollection);
+    const ballInteraction = new BallInteraction(
+      this.app,
+      ball,
+      platform,
+      bricksCollection,
+      this.onFinishGame
+    );
     ballInteraction.init();
   }
 
   private onBeforeDestroyBrickCb = (points: number) => {
     this.points += points;
-    console.log(this.points);
   };
   public async init(root: HTMLElement) {
+    this.app = new Application();
     await this.app.init({ resizeTo: root });
     this.app.stage.eventMode = "static";
     this.app.stage.hitArea = this.app.screen;
     this.draw();
     root.appendChild(this.app.canvas);
   }
-  public getPoints() {
-    return this.points;
+
+  public destroy() {
+    if (!this.app) {
+      return;
+    }
+    this.app.destroy({ removeView: true });
   }
 }
