@@ -15,11 +15,13 @@ export class BallInteraction {
   xDirection: number;
   bounceAngle: number;
   bricksCollection: BricksCollection;
+  onFinishGame: () => void;
   constructor(
     app: Application,
     ball: Ball,
     platform: Platform,
-    bricksCollection: BricksCollection
+    bricksCollection: BricksCollection,
+    onFinishGame: () => void
   ) {
     this.app = app;
     this.ball = ball;
@@ -29,6 +31,7 @@ export class BallInteraction {
     this.xDirection = 0;
     this.bounceAngle = 0;
     this.bricksCollection = bricksCollection;
+    this.onFinishGame = onFinishGame;
   }
 
   private tickerCb() {
@@ -64,6 +67,7 @@ export class BallInteraction {
 
     if (this.yDirection === 1 && this.ball.y >= this.app.screen.height - this.ball.getRadius()) {
       this.stopAnimation();
+      this.onFinishGame();
     }
 
     if (this.xDirection === -1 && this.ball.x - this.ball.getRadius() <= 0) {
@@ -151,6 +155,10 @@ export class BallInteraction {
           }
         }
         this.bricksCollection.destroyBrick(i);
+        if (this.bricksCollection.getBricksCollection().length === 0) {
+          this.stopAnimation();
+          this.onFinishGame();
+        }
       }
     }
   }
