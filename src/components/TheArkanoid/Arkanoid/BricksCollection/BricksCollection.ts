@@ -23,8 +23,10 @@ const BRICKS = [
 export class BricksCollection {
   app: Application;
   bricksCollection: Brick[];
-  constructor(app: Application) {
+  onBeforeDestroyBrick: (points: number) => void;
+  constructor(app: Application, onBeforeDestroyBrick: (points: number) => void) {
     this.app = app;
+    this.onBeforeDestroyBrick = onBeforeDestroyBrick;
     this.bricksCollection = [];
     this.buildCollection();
   }
@@ -45,5 +47,11 @@ export class BricksCollection {
 
   public getBricksCollection() {
     return this.bricksCollection;
+  }
+
+  public destroyBrick(index: number) {
+    this.onBeforeDestroyBrick(this.bricksCollection[index].points);
+    this.bricksCollection[index].destroy();
+    this.bricksCollection.splice(index, 1);
   }
 }
