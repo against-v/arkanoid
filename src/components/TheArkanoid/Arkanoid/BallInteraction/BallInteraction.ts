@@ -2,6 +2,7 @@ import type { Application } from "pixi.js";
 import type { Ball } from "@/components/TheArkanoid/Arkanoid/Ball";
 import { Platform } from "@/components/TheArkanoid/Arkanoid/Platform";
 import { testForAABB } from "@/utils/testForAABB";
+import { BricksCollection } from "@/components/TheArkanoid/Arkanoid/BricksCollection";
 
 const SPEED = 10;
 
@@ -13,7 +14,13 @@ export class BallInteraction {
   yDirection: number;
   xDirection: number;
   bounceAngle: number;
-  constructor(app: Application, ball: Ball, platform: Platform) {
+  bricksCollection: BricksCollection;
+  constructor(
+    app: Application,
+    ball: Ball,
+    platform: Platform,
+    bricksCollection: BricksCollection
+  ) {
     this.app = app;
     this.ball = ball;
     this.platform = platform;
@@ -21,11 +28,13 @@ export class BallInteraction {
     this.yDirection = -1;
     this.xDirection = 0;
     this.bounceAngle = 0;
+    this.bricksCollection = bricksCollection;
   }
 
   private tickerCb() {
     this.interactionWithBorders();
     this.interactionWithPlatform();
+    this.interactionWithBricks();
 
     const bounceAngleInRadians = this.bounceAngle * (Math.PI / 180);
     const ballSpeedX = SPEED * Math.cos(bounceAngleInRadians) * this.xDirection;
@@ -80,7 +89,6 @@ export class BallInteraction {
     }
 
     this.yDirection = -1;
-    this.ball.y = this.ball.y + this.yDirection * SPEED;
 
     const relativeIntersectX = this.platform.getTopCenterPoint().x - this.ball.x;
     let normalizedRelativeIntersectionX =
@@ -107,6 +115,43 @@ export class BallInteraction {
         break;
       default:
         this.xDirection = 0;
+    }
+  }
+
+  private interactionWithBricks() {
+    const bricks = this.bricksCollection.getBricksCollection();
+    for (let i = 0; i < bricks.length; i++) {
+      const brick = bricks[i];
+      if (testForAABB(this.ball, brick)) {
+        const ballBounds = this.ball.getBounds();
+
+        const brickBounds = brick.getBounds();
+        const overlapX = Math.max(
+          0,
+          Math.min(ballBounds.x + ballBounds.width, brickBounds.x + brickBounds.width) -
+            Math.max(ballBounds.x, brickBounds.x)
+        );
+        const overlapY = Math.max(
+          0,
+          Math.min(ballBounds.y + ballBounds.height, brickBounds.y + brickBounds.height) -
+            Math.max(ballBounds.y, brickBounds.y)
+        );
+
+        if (overlapX > overlapY) {
+          if (ballBounds.y < brickBounds.y) {
+            this.yDirection = -1;
+          } else {
+            this.yDirection = 1;
+          }
+        } else {
+          if (ballBounds.x < brickBounds.x) {
+            this.xDirection = -1;
+          } else {
+            this.xDirection = 1;
+          }
+        }
+        this.bricksCollection.destroyBrick(i);
+      }
     }
   }
 }
