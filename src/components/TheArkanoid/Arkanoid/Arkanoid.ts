@@ -1,7 +1,8 @@
 import { Application, Container } from "pixi.js";
 import { Platform } from "@/components/TheArkanoid/Arkanoid/Platform";
-import { Ball } from "@/components/TheArkanoid/Arkanoid/Ball/Ball";
+import { Ball } from "@/components/TheArkanoid/Arkanoid/Ball";
 import { UserPlatformInteraction } from "@/components/TheArkanoid/Arkanoid/UserPlatformInteraction";
+import { BallInteraction } from "@/components/TheArkanoid/Arkanoid/BallInteraction";
 
 export class Arkanoid {
   elements: Container[];
@@ -20,6 +21,8 @@ export class Arkanoid {
 
     const ball = new Ball(this.app, platform.getWidth(), platform.getTopCenterPoint());
     this.app.stage.addChild(ball);
+    const ballInteraction = new BallInteraction(this.app, ball, platform);
+    ballInteraction.init();
   }
   public async init(root: HTMLElement) {
     await this.app.init({ resizeTo: root });
