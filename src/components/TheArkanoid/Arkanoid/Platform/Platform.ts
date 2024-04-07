@@ -1,4 +1,4 @@
-import { Application, Graphics, type PointData } from "pixi.js";
+import { Application, Graphics } from "pixi.js";
 
 export class Platform extends Graphics {
   private app: Application;
@@ -6,7 +6,6 @@ export class Platform extends Graphics {
   private appHeight: number;
   private objWidth: number;
   private objHeight: number;
-  private objTopCenterPoint: PointData;
   constructor(app: Application) {
     super();
     this.app = app;
@@ -19,8 +18,6 @@ export class Platform extends Graphics {
     this.y = this.getY();
     this.rect(0, 0, this.objWidth, this.objHeight);
     this.fill(0xff0000);
-
-    this.objTopCenterPoint = this.getObjTopCenterPoint();
   }
   private getObjWidth() {
     return this.appWidth * 0.3;
@@ -37,13 +34,6 @@ export class Platform extends Graphics {
     return this.appHeight - this.objHeight - 10;
   }
 
-  private getObjTopCenterPoint() {
-    return {
-      x: this.x + this.objWidth / 2,
-      y: this.y
-    };
-  }
-
   public getWidth() {
     return this.objWidth;
   }
@@ -51,6 +41,9 @@ export class Platform extends Graphics {
     return this.objHeight;
   }
   public getTopCenterPoint() {
-    return this.objTopCenterPoint;
+    return {
+      x: this.x + this.objWidth / 2,
+      y: this.y
+    };
   }
 }
