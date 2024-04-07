@@ -8,7 +8,7 @@ export class Ball extends Graphics {
     this.x = this.getX(platformTopCenterPoint);
     this.y = this.getY(platformTopCenterPoint);
     this.circle(0, 0, this.objRadius);
-    this.fill(0x8f49ea);
+    this.fill(0xd520f7);
   }
 
   private getObjRadius(platformWidth: number) {
