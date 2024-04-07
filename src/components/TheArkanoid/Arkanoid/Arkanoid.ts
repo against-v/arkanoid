@@ -45,6 +45,7 @@ export class Arkanoid {
   };
   public async init(root: HTMLElement) {
     this.app = new Application();
+    this.points = 0;
     await this.app.init({ resizeTo: root });
     this.app.stage.eventMode = "static";
     this.app.stage.hitArea = this.app.screen;
