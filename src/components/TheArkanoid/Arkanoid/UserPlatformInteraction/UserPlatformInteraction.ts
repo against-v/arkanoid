@@ -37,7 +37,7 @@ export class UserPlatformInteraction {
     this.app.stage.off("pointermove", this.handlePointerMove);
     this.platformPointerX = 0;
   }
-  init() {
+  public init() {
     this.platform.eventMode = "static";
     this.platform.cursor = "pointer";
     this.platform.on("pointerdown", this.handlePointerDown, this);
