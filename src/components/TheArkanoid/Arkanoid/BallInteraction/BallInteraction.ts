@@ -10,7 +10,6 @@ export class BallInteraction {
   app: Application;
   ball: Ball;
   platform: Platform;
-  isStartAnimationRunning: boolean;
   yDirection: number;
   xDirection: number;
   bounceAngle: number;
@@ -26,7 +25,6 @@ export class BallInteraction {
     this.app = app;
     this.ball = ball;
     this.platform = platform;
-    this.isStartAnimationRunning = false;
     this.yDirection = -1;
     this.xDirection = 0;
     this.bounceAngle = 0;
@@ -46,14 +44,10 @@ export class BallInteraction {
   }
 
   private handlePointerDown() {
-    this.ball.eventMode = "passive";
     this.app.ticker.add(this.tickerCb, this);
   }
   public init() {
-    this.ball.eventMode = "static";
-    this.ball.cursor = "pointer";
-    this.ball.on("pointerdown", this.handlePointerDown, this);
-    this.isStartAnimationRunning = true;
+    this.platform.once("pointerdown", this.handlePointerDown, this);
   }
 
   private stopAnimation() {

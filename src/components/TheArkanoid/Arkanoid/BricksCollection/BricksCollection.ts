@@ -3,7 +3,7 @@ import { Brick } from "@/components/TheArkanoid/Arkanoid/Brick";
 import { getRandomElement } from "@/utils/getRandomElement";
 
 const ROWS = 5;
-const BRICKS_TOTAL = 2;
+const BRICKS_TOTAL = 40;
 const BRICKS_IN_ROW = 8;
 
 const BRICKS = [
