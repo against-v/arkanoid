@@ -1,4 +1,13 @@
-# ark
+# arkanoid
+Demo: https://against-v.github.io/arkanoid/
+
+Подсказка: Для запуска мяча необходимо коснуться платформы, для перемещения платформы необходимо зажимать ЛКМ
+
+## Description
+
+Для основы был взят Vue.js, для игровой составляющей был реализован класс Arkanoid который инициализирует приложение pixi.js
+
+---
 
 This template should help get you started developing with Vue 3 in Vite.
 
